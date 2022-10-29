@@ -2,12 +2,12 @@
 
 // creating a base name for the mongodb
 // REPLACE THE STRING WITH YOUR OWN DATABASE NAME
-const mongooseBaseName = 'express-auth-template'
+const mongooseBaseName = 'honey-badges'
 
 // create the mongodb uri for development and test
 const database = {
-	development: `mongodb://localhost/${mongooseBaseName}-development`,
-	test: `mongodb://localhost/${mongooseBaseName}-test`,
+	development: `mongodb+srv://mbaum:mongopass1211@cluster0.c4dao92.mongodb.net/${mongooseBaseName}-development?retryWrites=true&w=majority`,
+	test: `mongodb+srv://mbaum:mongopass1211@cluster0.c4dao92.mongodb.net/${mongooseBaseName}-test?retryWrites=true&w=majority`,
 }
 
 // Identify if development environment is test or development
