@@ -1,6 +1,6 @@
 const express = require('express')
 const passport = require('passport')
-const axios = require('axios').default
+const axios = require('axios')
 
 // pull in Mongoose model for activity
 const Activity = require('../models/activity')
@@ -47,21 +47,64 @@ router.get('/activities', (req, res, next) => {
 // SHOW 
 // GET (/activities/:id)
 //////////////////
-
+router.get('/acivities/:id', (req, res, next) => {
+    Activity.findById(req.params.id)
+    console.log('get activities/:id')
+    .populate('owner')
+    .then(handle404)
+    .then(activity => {
+        res.status(200).json({ activity: activity })
+    })
+    .catch(next)
+})
 
 
 ///////////////////
 // CREATE
 // POST (/activities)
 //////////////////
+router.post('/activities', (req, res, next) => {
+    console.log(req.body.activity)
+    console.log('post /activities')
+    Activity.create(req.body.activity)
+    .then(activity => {
+        res.status(201).json({ activity: activity })
+    })
+    .catch(next)
+})
 
+
+///////////////////
+// GET Random Activity
+// SHOW (/activities/random)
+//////////////////
+router.get('/random', (req, res, next) => {
+    console.log('get /activites/random')
+    axios(`http://www.boredapi.com/api/activity`)
+    .then( activity => {
+        console.log(activity.data)
+        res.send(activity.data)
+    })
+})
 
 
 ///////////////////
 // UPDATE
 // PATCH (/activities/:id)
 //////////////////
+router.patch('/activities/:id', requireToken, removeBlanks, (req, res, next) => {
+    delete req.body.activity.owner
 
+    Activity.findById(req.params.id)
+    .then(handle404)
+    .then(pet => {
+        requireOwnership(req, activity)
+
+        return activity.updateOne(req.body.activity)
+    })
+    .then(() => res.sendStatus(204))
+    .catch(next)
+})
 
 
 
@@ -69,5 +112,17 @@ router.get('/activities', (req, res, next) => {
 // DESTROY
 // DELETE (/activities/:id)
 //////////////////
+router.delete('/activities/:id', requireToken, (req, res, next) => {
+    Activity.findById(req.params.id)
+    .then(handle404)
+    .then((activity) => {
+        requireOwnership(req, activity)
+        activity.deleteOne()
+    })
+    .then(() => res.sendStatus(204))
+    .catch(next)
+})
+
+
 
 module.exports = router

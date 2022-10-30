@@ -4,11 +4,11 @@ const activitySchema = new mongoose.Schema(
     {
         activity: {
             type: String,
-            required: true
+            required: true,
         },
         accessibility: {
             type: Number,
-            required: true
+            required: true,
         },
         type: {
             type: String,
@@ -21,12 +21,12 @@ const activitySchema = new mongoose.Schema(
         },
         price: {
             type: Number,
-            required: true
+            required: true,
         },
-        buddies: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }],
+        // buddies: [{
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: 'User',
+        // }],
         owner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
