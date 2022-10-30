@@ -43,8 +43,20 @@ const activitySchema = new mongoose.Schema(
         
     },
     {
-        timestamps: true
+        timestamps: true,
+        toObject: { virtuals: true },
+        toJSON: {virtuals: true }
     }
 )
+
+activitySchema.virtual('publicNotes').get(function () {
+    const publicNotes = this.notes.filter(noteObject => noteObject.private === false)
+    return publicNotes.map(noteObject => ({
+        "text": noteObject.text,
+        "author": noteObject.owner.email
+    }))
+})
+
+
 
 module.exports = mongoose.model('Activity', activitySchema)

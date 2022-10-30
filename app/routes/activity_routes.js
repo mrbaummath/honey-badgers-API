@@ -33,7 +33,8 @@ const router = express.Router()
 //////////////////
 router.get('/activities', (req, res, next) => {
     Activity.find()
-    .populate('owner')
+    .populate('owner', 'email')
+    .populate('notes.owner', 'email')
         .then(activities => {
             return activities.map(activity => activity)
         })
@@ -48,12 +49,19 @@ router.get('/activities', (req, res, next) => {
 // SHOW 
 // GET (/activities/:id)
 //////////////////
-router.get('/activities/:id', (req, res, next) => {
+router.get('/activities/:id', requireToken, (req, res, next) => {
     Activity.findById(req.params.id)
     .populate('owner')
+    .populate('notes.owner', 'email')
     .then(handle404)
     .then(activity => {
-        res.status(200).json({ activity: activity })
+        console.log(req.user.id)
+        let privateViewableNotes = activity.notes.filter((noteObj) => ((noteObj.owner.id == req.user.id)&&(noteObj.private === true)))
+        privateViewableNotes = privateViewableNotes.map(noteObj => ({
+            "text": noteObj.text,
+            "author": noteObj.owner.email
+        }))
+        res.status(200).json({ activity: activity, publicNotes: activity.publicNotes, privateViewableNotes: privateViewableNotes })
     })
     .catch(next)
 })
