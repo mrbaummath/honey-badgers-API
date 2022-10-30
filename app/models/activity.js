@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const noteSchema = require('./note')
 
 const activitySchema = new mongoose.Schema(
     {
@@ -23,10 +24,18 @@ const activitySchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        progress: {
+            type: Number,
+            required: true,
+            min: 0,
+            max: 100,
+            default: 0
+        },
         // buddies: [{
         //     type: mongoose.Schema.Types.ObjectId,
         //     ref: 'User',
         // }],
+        notes: [noteSchema],
         owner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'

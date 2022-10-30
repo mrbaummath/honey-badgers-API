@@ -9,6 +9,7 @@ const noteSchema = new mongoose.Schema(
 		private: {
 			type: Boolean,
 			required: true,
+			default: false
 		},
 		owner: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -21,4 +22,4 @@ const noteSchema = new mongoose.Schema(
 	}
 )
 
-module.exports = mongoose.model('Note', noteSchema)
+module.exports = noteSchema
