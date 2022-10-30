@@ -40,6 +40,7 @@ router.get('/activities', (req, res, next) => {
     .populate('owner', 'email')
     .populate('notes.owner', 'email')
         .then(activities => {
+            activities = activities.filter(activity => activity.private === false)
             return activities.map(activity => activity)
         })
         .then(activities => {
