@@ -46,6 +46,32 @@ router.get('/activities', (req, res, next) => {
 
 
 ///////////////////
+// SHOW MINE
+// GET (/activities/mine)
+//////////////////
+//show all from current user
+router.get('/activities/mine', requireToken, (req,res,next) => {
+    Activity.find({'owner': req.user.id })
+        .then(handle404)
+        .then(activities => res.status(200).json({ activities: activities }))
+        .catch(next)
+})
+
+///////////////////
+// SHOW User's
+// GET (/activities/user/:userID
+//////////////////
+router.get('/activities/user/:userId', requireToken, (req,res,next) => {
+    Activity.find({'owner': req.params.userId })
+        .then(handle404)
+        .then(activities => {
+            const publicActivities = activities.filter(activity => activity.private === false)
+            res.status(200).json({activities : publicActivities })
+        })
+        .catch(next)
+})
+
+///////////////////
 // SHOW 
 // GET (/activities/:id)
 //////////////////
@@ -55,7 +81,6 @@ router.get('/activities/:id', requireToken, (req, res, next) => {
     .populate('notes.owner', 'email')
     .then(handle404)
     .then(activity => {
-        console.log(req.user.id)
         let privateViewableNotes = activity.notes.filter((noteObj) => ((noteObj.owner.id == req.user.id)&&(noteObj.private === true)))
         privateViewableNotes = privateViewableNotes.map(noteObj => ({
             "text": noteObj.text,

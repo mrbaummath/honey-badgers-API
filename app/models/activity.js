@@ -31,6 +31,11 @@ const activitySchema = new mongoose.Schema(
             max: 100,
             default: 0
         },
+        private: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
         // buddies: [{
         //     type: mongoose.Schema.Types.ObjectId,
         //     ref: 'User',
