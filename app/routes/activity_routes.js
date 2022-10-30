@@ -18,6 +18,7 @@ const requireOwnership = customErrors.requireOwnership
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { example: { title: '', text: 'foo' } } -> { example: { text: 'foo' } }
 const removeBlanks = require('../../lib/remove_blank_fields')
+const { ObjectId } = require('mongodb')
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
@@ -47,9 +48,8 @@ router.get('/activities', (req, res, next) => {
 // SHOW 
 // GET (/activities/:id)
 //////////////////
-router.get('/acivities/:id', (req, res, next) => {
+router.get('/activities/:id', (req, res, next) => {
     Activity.findById(req.params.id)
-    console.log('get activities/:id')
     .populate('owner')
     .then(handle404)
     .then(activity => {
@@ -63,9 +63,8 @@ router.get('/acivities/:id', (req, res, next) => {
 // CREATE
 // POST (/activities)
 //////////////////
-router.post('/activities', (req, res, next) => {
-    console.log(req.body.activity)
-    console.log('post /activities')
+router.post('/activities', requireToken, (req, res, next) => {
+    req.body.activity.owner = req.user.id
     Activity.create(req.body.activity)
     .then(activity => {
         res.status(201).json({ activity: activity })
@@ -96,9 +95,9 @@ router.patch('/activities/:id', requireToken, removeBlanks, (req, res, next) => 
     delete req.body.activity.owner
 
     Activity.findById(req.params.id)
-    .then(handle404)
-    .then(pet => {
-        requireOwnership(req, activity)
+        .then(handle404)
+        .then(activity => {
+            requireOwnership(req, activity)
 
         return activity.updateOne(req.body.activity)
     })
