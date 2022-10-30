@@ -5,8 +5,8 @@ const Activity = require('./activity')
 const db = require('../../config/db')
 
 const startActivities = [
-    { activity: 'Take a bubble bath', accessibility: 0.1, type: 'relaxation', participants: 1, price: 0.15, progress: 1 },
-    { activity: 'Clean out sock drawer', accessibility: 0, type: 'busywork', participants: 1, price: 0, progress: .5 },
+    { activity: 'Take a bubble bath', accessibility: 0.1, type: 'relaxation', participants: 1, price: 0.15, progress: 100 },
+    { activity: 'Clean out sock drawer', accessibility: 0, type: 'busywork', participants: 1, price: 0, progress: 50 },
     { activity: 'Host a board game night', accessibility: 0.5, type: 'social', participants: 4, price: 0.1, progress: 0},
 ]
 

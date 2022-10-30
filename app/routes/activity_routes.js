@@ -24,6 +24,10 @@ const { ObjectId } = require('mongodb')
 // it will also set `req.user`
 const requireToken = passport.authenticate('bearer', { session: false })
 
+//custom functions
+//function to count up completed activities of each type from a mongoose query giving an array of a user's activities
+const countFinished = require('../../lib/count_finished')
+
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
@@ -51,9 +55,14 @@ router.get('/activities', (req, res, next) => {
 //////////////////
 //show all from current user
 router.get('/activities/mine', requireToken, (req,res,next) => {
+
     Activity.find({'owner': req.user.id })
         .then(handle404)
-        .then(activities => res.status(200).json({ activities: activities }))
+        //give back all activities
+        .then(activities => {
+            const completedCounts = countFinished(activities)
+            res.status(200).json({ activities: activities, completedCounts:completedCounts })
+        })
         .catch(next)
 })
 
@@ -65,8 +74,12 @@ router.get('/activities/user/:userId', requireToken, (req,res,next) => {
     Activity.find({'owner': req.params.userId })
         .then(handle404)
         .then(activities => {
+            //filter out activities marked as private
             const publicActivities = activities.filter(activity => activity.private === false)
-            res.status(200).json({activities : publicActivities })
+            //get completedCounts 
+            const completedCounts = countFinished(activities)
+            //return the public activities
+            res.status(200).json({activities : publicActivities, completedCounts:completedCounts })
         })
         .catch(next)
 })
