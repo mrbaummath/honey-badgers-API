@@ -39,7 +39,14 @@ const userSchema = new mongoose.Schema(
 
 //VIRTUALS to help display relevant accomplishment and associations on the client side
 //completed tasks per 
+userSchema.virtual('activities')
+	.get(function () {
+		const activities = {}
+		//find all activities this user owns
+		Activity.find({ owner: this.id })
+			
 
+	})
 
 
 module.exports = mongoose.model('User', userSchema)
