@@ -7,7 +7,7 @@
     "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Lauren Routier",
+  "author": "LR, JH, AS, MB",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.1.3",
