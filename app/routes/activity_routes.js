@@ -27,6 +27,8 @@ const requireToken = passport.authenticate('bearer', { session: false })
 //custom functions
 //function to count up completed activities of each type from a mongoose query giving an array of a user's activities
 const countFinished = require('../../lib/count_finished')
+//function to assign badges
+const badges = require('../../lib/badges')
 
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
@@ -61,8 +63,11 @@ router.get('/activities/mine', requireToken, (req,res,next) => {
         .then(handle404)
         //give back all activities
         .then(activities => {
+            //return counts of completed activities
             const completedCounts = countFinished(activities)
-            res.status(200).json({ activities: activities, completedCounts:completedCounts })
+            //return badges
+            const userBadges = badges(activities)
+            res.status(200).json({ activities: activities, completedCounts:completedCounts, userBadges: userBadges })
         })
         .catch(next)
 })
@@ -79,8 +84,10 @@ router.get('/activities/user/:userId', requireToken, (req,res,next) => {
             const publicActivities = activities.filter(activity => activity.private === false)
             //get completedCounts 
             const completedCounts = countFinished(activities)
+            //return badges
+            const userBadges = badges(activities)
             //return the public activities
-            res.status(200).json({activities : publicActivities, completedCounts:completedCounts })
+            res.status(200).json({activities : publicActivities, completedCounts:completedCounts, userBadges:userBadges })
         })
         .catch(next)
 })

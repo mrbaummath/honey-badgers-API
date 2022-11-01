@@ -62,6 +62,10 @@ activitySchema.virtual('publicNotes').get(function () {
     }))
 })
 
+activitySchema.virtual('categoryName').get(function () {
+    return `${this.type[0].toUpperCase()}${this.type.slice(1)}`
+})
+
 
 
 module.exports = mongoose.model('Activity', activitySchema)
