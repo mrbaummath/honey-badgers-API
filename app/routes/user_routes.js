@@ -140,4 +140,13 @@ router.delete('/sign-out', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
+//GET user info
+//GET /info
+router.get('/user/:userId', requireToken, (req,res,next) => {
+	const { userId } = req.params
+	User.findById(userId)
+		.then(user => res.status(200).json({ user: {email: user.email} }))
+		.catch(next)
+})
+
 module.exports = router
