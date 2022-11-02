@@ -14,7 +14,7 @@ const activitySchema = new mongoose.Schema(
         type: {
             type: String,
             required: true,
-            enum: ['education', 'social', 'diy', 'charity', 'cooking', 'relaxation', 'music', 'busywork'],
+            enum: ['education', 'recreational', 'social', 'diy', 'charity', 'cooking', 'relaxation', 'music', 'busywork'],
         },
         participants: {
             type: Number,
