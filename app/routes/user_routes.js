@@ -131,6 +131,27 @@ router.patch('/change-password', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
+// CHANGE buddies
+// PATCH /change-buddies
+router.patch('/change-buddies', requireToken, (req, res, next) => {
+	let user
+	// `req.user` will be determined by decoding the token payload
+	User.findById(req.user.id)
+		// save user outside the promise chain
+		.then((record) => {
+			user = record
+		})
+		.then((buddies) => {
+			// set and save the new hashed password in the DB
+			user.buddies = buddies
+			return user.save()
+		})
+		// respond with no content and status 200
+		.then(() => res.sendStatus(204))
+		// pass any errors along to the error handler
+		.catch(next)
+})
+
 router.delete('/sign-out', requireToken, (req, res, next) => {
 	// create a new random token for the user, invalidating the current one
 	req.user.token = crypto.randomBytes(16)

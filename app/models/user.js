@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema(
 			required: false,
 			unique: false,
 		},
+		buddies: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        }],
 		token: String,
 	},
 	{

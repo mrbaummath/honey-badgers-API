@@ -37,10 +37,10 @@ const activitySchema = new mongoose.Schema(
             required: true,
             default: false
         },
-        // buddies: [{
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: 'User',
-        // }],
+        buddies: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        }],
         notes: [noteSchema],
         owner: {
             type: mongoose.Schema.Types.ObjectId,
