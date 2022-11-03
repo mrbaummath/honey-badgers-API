@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const noteSchema = require('./note')
 
+
 const activitySchema = new mongoose.Schema(
     {
         activity: {
@@ -64,6 +65,28 @@ activitySchema.virtual('publicNotes').get(function () {
 
 activitySchema.virtual('categoryName').get(function () {
     return `${this.type[0].toUpperCase()}${this.type.slice(1)}`
+})
+
+activitySchema.virtual('categoryIcon').get(function () {
+    if(this.type == 'education'){
+      return ('graduation cap')  
+    } else if (this.type == 'recreational'){
+        return ('table tennis')
+    } else if (this.type == 'social'){
+        return ('handshake')
+    } else if (this.type == 'diy'){
+        return ('configure')
+    } else if (this.type == 'cooking'){
+        return ('food')
+    } else if (this.type == 'music'){
+        return ('music')
+    } else if (this.type == 'busywork'){
+        return ('edit outline')
+    } else if (this.type == 'charity'){
+        return ('heart')
+    } else if (this.type == 'relaxation'){
+        return ('puzzle')
+    }
 })
 
 
