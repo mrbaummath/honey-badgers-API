@@ -134,16 +134,12 @@ router.patch('/change-password', requireToken, (req, res, next) => {
 // CHANGE buddies
 // PATCH /change-buddies
 router.patch('/change-buddies', requireToken, (req, res, next) => {
-	let user
+	const buddy = req.body.buddy
 	// `req.user` will be determined by decoding the token payload
 	User.findById(req.user.id)
 		// save user outside the promise chain
-		.then((record) => {
-			user = record
-		})
-		.then((buddies) => {
-			// set and save the new hashed password in the DB
-			user.buddies = buddies
+		.then((user) => {
+			user.buddies.push(buddy)
 			return user.save()
 		})
 		// respond with no content and status 200
