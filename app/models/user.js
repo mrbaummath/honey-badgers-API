@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 //import activity model to be used for virtual processing
 const Activity = require('./activity')
+const messageSchema = require('./message')
 
 const userSchema = new mongoose.Schema(
 	{
