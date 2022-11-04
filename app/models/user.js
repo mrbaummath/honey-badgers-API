@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
 			required: false,
 			unique: false,
 		},
-		buddies: [String],
+		buddies: [[String]],
 		token: String,
 	},
 	{
