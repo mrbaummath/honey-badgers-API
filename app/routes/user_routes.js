@@ -45,6 +45,7 @@ router.post('/sign-up', (req, res, next) => {
 			return {
 				username: req.body.credentials.username,
 				email: req.body.credentials.email,
+				createdDate:req.body.credentials.createdDate,
 				hashedPassword: hash,
 			}
 		})
@@ -146,7 +147,7 @@ router.delete('/sign-out', requireToken, (req, res, next) => {
 router.get('/user/:userId', requireToken, (req,res,next) => {
 	const { userId } = req.params
 	User.findById(userId)
-		.then(user => res.status(200).json({ user: {email: user.email} }))
+		.then(user => res.status(200).json({ user: {email: user.email, createdDate: user.createdDate} }))
 		.catch(next)
 })
 
