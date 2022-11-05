@@ -62,7 +62,7 @@ router.get('/messages', (req, res, next) => {
 //show all from current user
 router.get('/messages/mine', requireToken, (req,res,next) => {
 
-    Message.find({'recipient': req.user.id })
+    Message.find({'recipient': mongoose.Types.ObjectId(req.user.id) })
         .then(handle404)
         //give back all activities
         .then(messages => {
