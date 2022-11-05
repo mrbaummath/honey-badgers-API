@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema(
 			required: false,
 			unique: false,
 		},
+		avatar: {
+			type: String,
+			required: false,
+			unique: false,
+		},
 		buddies: [String],
 		token: String,
 	},
