@@ -164,7 +164,7 @@ router.delete('/sign-out', requireToken, (req, res, next) => {
 router.get('/user/:userId', requireToken, (req,res,next) => {
 	const { userId } = req.params
 	User.findById(userId)
-		.then(user => res.status(200).json({ user: {email: user.email, createdDate: user.createdDate} }))
+		.then(user => res.status(200).json({ user: {email: user.email, createdDate: user.createdDate, buddies: user.buddies, user: user} }))
 		.catch(next)
 })
 
