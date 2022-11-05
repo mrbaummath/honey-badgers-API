@@ -60,14 +60,12 @@ router.get('/messages', (req, res, next) => {
 // GET (/activities/mine)
 //////////////////
 //show all from current user
-router.get('/messages/mine', (req,res,next) => {
+router.get('/messages/mine', requireToken, (req,res,next) => {
 
-    Message.find({'recipient': '635fcd2e20335c848dc124e4' })
+    Message.find({'recipient': req.user.id })
         .then(handle404)
         //give back all activities
         .then(messages => {
-            //return counts of completed activities
-            
             res.status(200).json({ messages: messages })
         })
         .catch(next)

@@ -5,12 +5,20 @@ const mongoose = require('mongoose')
 const messageSchema = new mongoose.Schema(
     {
         recipient: {
-            type: String, 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true 
         },
         owner: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'User',
+            required: true
         },
+        content: {
+            type: String,
+            required: true,
+            default: 'would love to connect'
+        }
         
     },
     {
