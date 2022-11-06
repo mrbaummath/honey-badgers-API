@@ -1,4 +1,5 @@
 const express = require('express')
+const mongoose = require('mongoose')
 
 //MIDDLEWARE
 
@@ -133,8 +134,8 @@ router.patch('/change-password', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-// CHANGE buddies
-// PATCH /change-buddies
+// UPDATE buddies
+// PATCH /user/addbuddy
 router.patch('/user/addbuddy', requireToken, (req, res, next) => {
 	const buddyId = req.body.buddyId
 	//add the requesting buddy to the accepting user's buddies array
@@ -156,6 +157,34 @@ router.patch('/user/addbuddy', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
+//UPDATE buddies --> remove buddies
+//DELETE /user/:id1/:id2
+router.patch('/user/removebuddy', requireToken, (req,res,next) => {
+	//grab buddyId from data
+	const buddyId = req.body.buddyId
+	//grab id of requesting user
+	const userId = req.user.id
+	//remove the buddy from the requesting user's array
+	User.findById(userId)
+		.then(user => {
+			//grab the buddy's index for splicing
+			const index = user.buddies.indexOf(mongoose.Types.ObjectId(buddyId))
+			//remove the buddy
+			user.buddies.splice(index,1)
+			return user.save()
+		})
+		.catch(next)
+	//repeat process in other direction --> remove the user from the buddy's array
+	User.findById(buddyId)
+		.then(user => {
+			const index = user.buddies.indexOf(mongoose.Types.ObjectId(userId))
+			user.buddies.splice(index,1)
+			return user.save()
+		})
+		.then(() => res.sendStatus(200))
+		.catch(next)
+})
+
 router.delete('/sign-out', requireToken, (req, res, next) => {
 	// create a new random token for the user, invalidating the current one
 	req.user.token = crypto.randomBytes(16)
@@ -166,13 +195,25 @@ router.delete('/sign-out', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
+//GET user buddies --> having this route is useful to compartmentalize the buddies component in the app 
+//GET /user/buddies
+router.get('/user/buddies', requireToken, (req,res,next) => {
+	User.findById(req.user.id)
+		.populate('buddies', ['email', 'username'])
+		.then(user => res.status(200).json({buddies: user.buddies}))
+		.catch(next)
+})
+
 //GET user info
-//GET /info
+//GET /uer/userID
 router.get('/user/:userId', requireToken, (req,res,next) => {
 	const { userId } = req.params
 	User.findById(userId)
 		.then(user => res.status(200).json({ user: {email: user.email, createdDate: user.createdDate, buddies: user.buddies, user: user} }))
 		.catch(next)
 })
+
+
+
 
 module.exports = router
