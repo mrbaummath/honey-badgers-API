@@ -39,7 +39,7 @@ const router = express.Router()
 //////////////////
 router.get('/activities', (req, res, next) => {
     Activity.find()
-    .populate('owner', 'email')
+    .populate('owner', ['email', 'username', 'avatar'])
     .populate('notes.owner', 'email')
         .then(activities => {
             activities = activities.filter(activity => activity.private === false)

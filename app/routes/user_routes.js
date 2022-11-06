@@ -200,7 +200,7 @@ router.delete('/sign-out', requireToken, (req, res, next) => {
 //GET /user/buddies
 router.get('/user/buddies', requireToken, (req,res,next) => {
 	User.findById(req.user.id)
-		.populate('buddies', ['email', 'username'])
+		.populate('buddies', ['email', 'username', 'avatar'])
 		.then(user => res.status(200).json({buddies: user.buddies}))
 		.catch(next)
 })
@@ -210,7 +210,7 @@ router.get('/user/buddies', requireToken, (req,res,next) => {
 router.get('/user/:userId', requireToken, (req,res,next) => {
 	const { userId } = req.params
 	User.findById(userId)
-		.then(user => res.status(200).json({ user: {email: user.email, createdDate: user.createdDate, buddies: user.buddies, user: user} }))
+		.then(user => res.status(200).json({ user: {email: user.email, createdDate: user.createdDate, buddies: user.buddies, user: user, avatar:user.avatar} }))
 		.catch(next)
 })
 
