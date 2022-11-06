@@ -11,7 +11,7 @@ processes = []
 [env]
   PORT = "8080"
   MONGODB_URI = "mongodb+srv://mbaum:mongopass1211@cluster0.c4dao92.mongodb.net/honey-badgers-api-development?retryWrites=true&w=majority"
-  CLIENT_ORIGIN="https://gleaming-platypus-fa2f95.netlify.app/"
+  CLIENT_ORIGIN="https://gleaming-platypus-fa2f95.netlify.app" 
   
 
 [experimental]
