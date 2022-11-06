@@ -66,6 +66,7 @@ router.post('/sign-in', (req, res, next) => {
 
 	// find a user based on the email that was passed
 	User.findOne({ email: req.body.credentials.email })
+		.populate('buddies', ['email','username'])
 		.then((record) => {
 			// if we didn't find a user with that email, send 401
 			if (!record) {
@@ -134,18 +135,24 @@ router.patch('/change-password', requireToken, (req, res, next) => {
 
 // CHANGE buddies
 // PATCH /change-buddies
-router.patch('/change-buddies', requireToken, (req, res, next) => {
-	const buddy = req.body.buddy
-	// `req.user` will be determined by decoding the token payload
+router.patch('/user/addbuddy', requireToken, (req, res, next) => {
+	const buddyId = req.body.buddyId
+	//add the requesting buddy to the accepting user's buddies array
 	User.findById(req.user.id)
 		// save user outside the promise chain
 		.then((user) => {
-			user.buddies.push(buddy)
+			user.buddies.push(buddyId)
 			return user.save()
 		})
-		// respond with no content and status 200
-		.then(() => res.sendStatus(204))
 		// pass any errors along to the error handler
+		.catch(next)
+	//add the accepting buddy to the requesting user's buddy array
+	User.findById(buddyId)
+		.then(user => {
+			user.buddies.push(req.user.id)
+			return user.save()
+		})
+		.then(() => res.sendStatus(200))
 		.catch(next)
 })
 

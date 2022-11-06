@@ -1,6 +1,6 @@
 const express = require('express')
 const passport = require('passport')
-const axios = require('axios')
+const mongoose = require('mongoose')
 
 // pull in Mongoose model for activity
 const Message = require('../models/message')
@@ -63,8 +63,8 @@ router.get('/messages', (req, res, next) => {
 router.get('/messages/mine', requireToken, (req,res,next) => {
 
     Message.find({'recipient': mongoose.Types.ObjectId(req.user.id) })
+        .populate('owner')
         .then(handle404)
-        //give back all activities
         .then(messages => {
             res.status(200).json({ messages: messages })
         })
