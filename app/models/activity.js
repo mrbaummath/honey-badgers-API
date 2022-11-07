@@ -12,13 +12,13 @@ const activitySchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        type: {
+        type: { // lovely use of enum, consider using a different name since type is a very common reserved keyword ( got away with it here because its a key of an object / a string )
             type: String,
             required: true,
             enum: ['education', 'recreational', 'social', 'diy', 'charity', 'cooking', 'relaxation', 'music', 'busywork'],
         },
-        participants: {
-            type: Number,
+        participants: { // consider adding custom validation to ensure that we never have non positive integers here - ( like 1.5 peoples is kinda gruesome )
+            type: Number, 
             required: true,
         },
         price: {
@@ -37,7 +37,7 @@ const activitySchema = new mongoose.Schema(
             required: true,
             default: false
         },
-        buddies: [{
+        buddies: [{ // confused by use of name here - users already have a many to many with themselves by this key, try using a different name here for a new relationship
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
         }],
@@ -50,7 +50,7 @@ const activitySchema = new mongoose.Schema(
     },
     {
         timestamps: true,
-        toObject: { virtuals: true },
+        toObject: { virtuals: true }, // NICE
         toJSON: {virtuals: true }
     }
 )
@@ -68,8 +68,8 @@ activitySchema.virtual('categoryName').get(function () {
 })
 
 activitySchema.virtual('categoryIcon').get(function () {
-    if(this.type == 'education'){
-      return ('graduation cap')  
+    if(this.type == 'education'){ // use strict equality here, only use loose inequality when you have to
+      return ('graduation cap')  // missing 2 spaces 
     } else if (this.type == 'recreational'){
         return ('table tennis')
     } else if (this.type == 'social'){

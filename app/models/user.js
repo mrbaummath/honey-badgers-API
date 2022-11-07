@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
-//import activity model to be used for virtual processing
-const Activity = require('./activity')
+//import activity model to be used for virtual processing < good comment
+const Activity = require('./activity') // unused import, should be in a V2 branch if you plan on using it.
 
 const userSchema = new mongoose.Schema(
 	{
@@ -20,16 +20,16 @@ const userSchema = new mongoose.Schema(
 			required: true,
 		},
 		avatar: {
-			type: String,
+			type: String, 
 			required: true,
-			default: 'https://i.imgur.com/uEW4fPX.png'
+			default: 'https://i.imgur.com/uEW4fPX.png' // good use of default 
 		},
 		createdDate: {
 			type: String,
 			required: false,
-			unique: false,
+			unique: false, // unique is false by default 
 		},
-		buddies: [{
+		buddies: [{ // good use of many to many ! 
 			type : mongoose.Schema.Types.ObjectId,
 			ref: 'User'
 		}],

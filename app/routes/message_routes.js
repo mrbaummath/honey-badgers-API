@@ -19,7 +19,7 @@ const handle404 = customErrors.handle404
 
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { example: { title: '', text: 'foo' } } -> { example: { text: 'foo' } }
-const removeBlanks = require('../../lib/remove_blank_fields')
+const removeBlanks = require('../../lib/remove_blank_fields') // unused imports ! 
 const { ObjectId } = require('mongodb')
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -63,7 +63,7 @@ router.get('/messages', (req, res, next) => {
 router.get('/messages/mine', requireToken, (req,res,next) => {
 
     Message.find({'recipient': mongoose.Types.ObjectId(req.user.id) })
-        .populate('owner')
+        .populate('owner') // indentation - are you indenting the chain populate or not - be consistent 
         .then(handle404)
         .then(messages => {
             res.status(200).json({ messages: messages })
@@ -92,7 +92,7 @@ router.get('/messages/user/:userId', requireToken, (req,res,next) => {
 //////////////////
 router.get('/messages/:id', requireToken, (req, res, next) => {
     Message.findById(req.params.id)
-    .populate('owner')
+    .populate('owner')  // indentation 
     .then(handle404)
     .then(message => {
         message = message.map(message => ({
@@ -111,7 +111,7 @@ router.get('/messages/:id', requireToken, (req, res, next) => {
 router.post('/messages', requireToken, (req, res, next) => {
     req.body.message.owner = req.user.id
     Message.create(req.body.message)
-    .then(message => {
+    .then(message => {  // indentation 
         res.status(201).json({ message: message })
     })
     .catch(next)
@@ -124,7 +124,7 @@ router.post('/messages', requireToken, (req, res, next) => {
 //////////////////
 router.delete('/messages/:id', (req, res, next) => {
     Message.findById(req.params.id)
-    .then(handle404)
+    .then(handle404) // indentation 
     .then((message) => {
         message.deleteOne()
     })

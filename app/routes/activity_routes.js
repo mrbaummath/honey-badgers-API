@@ -18,7 +18,7 @@ const requireOwnership = customErrors.requireOwnership
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { example: { title: '', text: 'foo' } } -> { example: { text: 'foo' } }
 const removeBlanks = require('../../lib/remove_blank_fields')
-const { ObjectId } = require('mongodb')
+const { ObjectId } = require('mongodb') // unused import 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
@@ -42,8 +42,8 @@ router.get('/activities', (req, res, next) => {
     .populate('owner', ['email', 'username', 'avatar'])
     .populate('notes.owner', 'email')
         .then(activities => {
-            activities = activities.filter(activity => activity.private === false)
-            return activities.map(activity => activity)
+            activities = activities.filter(activity => activity.private === false) // self reference in reassignment is discouraged, use a better variable name
+            return activities.map(activity => activity) // this map does nothing ? filter already returns an array and you aren't mutating it at all 
         })
         .then(activities => {
             res.status(200).json({ activities: activities })
@@ -79,11 +79,11 @@ router.get('/activities/mine', requireToken, (req,res,next) => {
 router.get('/activities/user/:userId', requireToken, (req,res,next) => {
     Activity.find({'owner': req.params.userId })
         .then(handle404)
-        .then(activities => {
+        .then(activities => { // this block makes me happy, lovely code organization importing custom use functions 
             //filter out activities marked as private
             const publicActivities = activities.filter(activity => activity.private === false)
             //get completedCounts 
-            const completedCounts = countFinished(activities)
+            const completedCounts = countFinished(activities) 
             //return badges
             const userBadges = badges(activities)
             //return the public activities
@@ -100,7 +100,7 @@ router.get('/activities/:id', requireToken, (req, res, next) => {
     Activity.findById(req.params.id)
     .populate('owner')
     .populate('notes.owner')
-    .then(handle404)
+    .then(handle404) // indentation 
     .then(activity => {
         let privateViewableNotes = activity.notes.filter((noteObj) => ((noteObj.owner.id == req.user.id)&&(noteObj.private === true)))
         privateViewableNotes = privateViewableNotes.map(noteObj => ({
@@ -120,7 +120,7 @@ router.get('/activities/:id', requireToken, (req, res, next) => {
 router.post('/activities', requireToken, (req, res, next) => {
     req.body.activity.owner = req.user.id
     Activity.create(req.body.activity)
-    .then(activity => {
+    .then(activity => { // indentation
         res.status(201).json({ activity: activity })
     })
     .catch(next)
@@ -134,7 +134,7 @@ router.post('/activities', requireToken, (req, res, next) => {
 router.get('/random', (req, res, next) => {
     console.log('get /activites/random')
     axios(`http://www.boredapi.com/api/activity`)
-    .then( activity => {
+    .then( activity => { // indentation 
         console.log(activity.data)
         res.send(activity.data)
     })
@@ -167,7 +167,7 @@ router.patch('/activities/:id', requireToken, removeBlanks, (req, res, next) => 
 //////////////////
 router.delete('/activities/:id', requireToken, (req, res, next) => {
     Activity.findById(req.params.id)
-    .then(handle404)
+    .then(handle404) // indentation 
     .then((activity) => {
         requireOwnership(req, activity)
         activity.deleteOne()
