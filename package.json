@@ -4,7 +4,7 @@
   "description": "activity tracker and social media app",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "node ./app/models/seed.js",
     "seedagain": "node ./app/models/seedagain.js"
