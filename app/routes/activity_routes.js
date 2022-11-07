@@ -99,7 +99,7 @@ router.get('/activities/user/:userId', requireToken, (req,res,next) => {
 router.get('/activities/:id', requireToken, (req, res, next) => {
     Activity.findById(req.params.id)
     .populate('owner')
-    .populate('notes.owner', 'email')
+    .populate('notes.owner')
     .then(handle404)
     .then(activity => {
         let privateViewableNotes = activity.notes.filter((noteObj) => ((noteObj.owner.id == req.user.id)&&(noteObj.private === true)))
