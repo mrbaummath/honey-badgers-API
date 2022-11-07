@@ -136,7 +136,7 @@ router.patch('/change-password', requireToken, (req, res, next) => {
 })
 
 // UPDATE buddies
-// PATCH /user/addbuddy
+// PATCH /user/addbuddy // Camel case ?
 router.patch('/user/addbuddy', requireToken, (req, res, next) => {
 	const buddyId = req.body.buddyId
 	//add the requesting buddy to the accepting user's buddies array
@@ -160,7 +160,7 @@ router.patch('/user/addbuddy', requireToken, (req, res, next) => {
 
 //UPDATE buddies --> remove buddies
 //DELETE /user/:id1/:id2
-router.patch('/user/removebuddy', requireToken, (req,res,next) => {
+router.patch('/user/removebuddy', requireToken, (req,res,next) => { // camel case ?
 	//grab buddyId from data
 	const buddyId = req.body.buddyId
 	//grab id of requesting user

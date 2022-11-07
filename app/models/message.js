@@ -23,7 +23,7 @@ const messageSchema = new mongoose.Schema(
     },
     {
         timestamps: true,
-        toObject: { virtuals: true },
+        toObject: { virtuals: true }, // do we need virtuals here ? V2 should be in a separate branch 
         toJSON: {virtuals: true }
     }
 )

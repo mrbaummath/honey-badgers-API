@@ -2,7 +2,7 @@
 const express = require('express')
 // Passport docs: http://www.passportjs.org/docs/
 
-// import activity model --> notes are activity subbocs
+// import activity model --> notes are activity subbocs // PERFECT COMMENT
 const Activity = require('../models/activity')
 
 //MIDDLEWARE IMPORTS
@@ -21,7 +21,7 @@ const router = express.Router()
 
 // CREATE NEW NOTE --> any user can add a note to any activity they can see 
 // POST /notes/<activity_Id>
-router.post('/notes/:activityId', requireToken, (req, res, next) => {
+router.post('/notes/:activityId', requireToken, (req, res, next) => { // awesome comments here 
     //store values from req.body
     const note = req.body.note
     //add ownership to note --> authors can edit/delete their messages 
